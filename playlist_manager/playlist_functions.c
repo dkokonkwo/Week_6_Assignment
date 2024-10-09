@@ -103,16 +103,18 @@ int min_to_sec(char *song_length)
  */
 void play_song(song_t *song)
 {
-    int duration, count;
+    int duration, count, interval;
     if (song)
     {
         count = 0;
         duration = min_to_sec(song->length);
+        interval = duration / 20;
         printf("Playing: %s [length: %s]\n", song->name, song->length);
         while (count <= 20)
         {
-            printf("# ");
-            usleep((duration * 1000000) / 20);
+            printf("#");
+            fflush(stdout);
+            sleep(interval);
             count++;
         }
         printf("\n");
