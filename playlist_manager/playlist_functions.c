@@ -48,7 +48,7 @@ song_t *create_song(char *name, char *length)
  */
 int add_song(playlist_t *playlist, char *name, char *length)
 {
-    song_t *new_song, *temp;
+    song_t *new_song;
     if (!playlist || !name || !length)
         return 0;
 

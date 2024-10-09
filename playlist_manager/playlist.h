@@ -31,4 +31,11 @@ typedef struct playlist_s
     song_t *last;
 } playlist_t;
 
+playlist_t *create_playlist(void);
+song_t *create_song(char *name, char *length);
+int add_song(playlist_t *playlist, char *name, char *length);
+int min_to_sec(char *song_length);
+void play_song(song_t *song);
+void play_playlist(playlist_t *playlist);
+
 #endif

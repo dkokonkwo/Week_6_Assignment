@@ -41,6 +41,20 @@ int main(void)
         
         case '3':
             printf("Exiting the program.\n");
+            if (playlist->nb_songs == 0)
+                free(playlist);
+            else
+            {
+                song_t *current, *next;
+                for (current = playlist->first; current; current = next)
+                {
+                    next = current->next;
+                    free(current->name);
+                    free(current->length);
+                    free(current);
+                }
+                free(playlist);
+            }
             exit(0);
 
         default:
