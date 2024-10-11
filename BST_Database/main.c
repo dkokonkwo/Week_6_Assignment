@@ -109,6 +109,7 @@ int main()
                 printf("Displaying out-of-stock products:\n");
                 out_of_stock(database->head);
                 break;
+                
 
             case 6:
                 delete_database(database->head);

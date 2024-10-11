@@ -50,6 +50,7 @@ database_t *create_database(void);
 product_t *create_product(char *name, char *ID, double price, int quantity);
 node_t *create_node(product_t *product);
 int add_product(database_t *database, char *name, char *ID, double price, int quantity);
+node_t *search_product(database_t *database, char *name);
 int update_details(database_t *database, char *name, char *new_name, char *new_ID, double new_price, int new_quantity);
 void database_inorder(node_t *head);
 void out_of_stock(node_t *head);
