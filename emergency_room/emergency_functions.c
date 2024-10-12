@@ -77,7 +77,18 @@ patient_t *create_patient(char *name, char *condition, int severity)
     if (!new_patient)
         return NULL;
     new_patient->name = strdup(name);
+    if (!new_patient->name)
+    {
+        free(new_patient);
+        return NULL;
+    }
     new_patient->condition = strdup(condition);
+    if (!new_patient->condition)
+    {
+        free(new_patient->name);
+        free(new_patient);
+        return NULL;
+    }
     new_patient->severity = severity;
     return new_patient;
 }
@@ -102,15 +113,13 @@ patient_t *add_patient(max_heap_t *pHeap, char *name, char *condition, int sever
         pHeap->heap_size *= 2;
         patient_t **new_heap = realloc(pHeap->heap, pHeap->heap_size * sizeof(patient_t *));
         if (!new_heap)
+        {
             free_heap(pHeap->heap);
-        return NULL;
+            return NULL;
+        }
         pHeap->heap = new_heap;
-        pHeap->heap[++pHeap->nb_patients] = new_patient;
     }
-    else
-    {
-        pHeap->heap[++pHeap->nb_patients] = new_patient;
-    }
+    pHeap->heap[++pHeap->nb_patients] = new_patient;
     swim(pHeap);
     return new_patient;
 }
@@ -118,14 +127,17 @@ patient_t *add_patient(max_heap_t *pHeap, char *name, char *condition, int sever
 /**
  * extract_max - pops patient in most severe condition
  * @pHeap: heap structure of patient
- * Return: patient
+ * Return: patient or NULL if less than 1
  */
 patient_t *extract_max(max_heap_t *pHeap)
 {
+    if (pHeap->nb_patients < 1)
+        return NULL;
     patient_t *patient = pHeap->heap[1];
     exch(pHeap, 1, pHeap->nb_patients);
     free_patient(pHeap->heap[pHeap->nb_patients--]);
     sink(pHeap, 1);
+    return patient;
 }
 
 /**
@@ -162,7 +174,7 @@ void display_patient_queue(max_heap_t *pHeap)
     int i;
     for (i = 1; i <= pHeap->nb_patients; i++)
     {
-        printf("Patient: %s, Condition: %s, Severity: %d.\n", pHeap->heap[i]);
+        printf("Patient: %s, Condition: %s, Severity: %d.\n", pHeap->heap[i]->name, pHeap->heap[i]->condition, pHeap->heap[i]->severity);
     }
 }
 
@@ -177,7 +189,7 @@ int search_patient(max_heap_t *pHeap, char *name)
     if (!pHeap || !name)
         return 0;
     int i = 1;
-    while (pHeap->heap[i])
+    while (i <= pHeap->nb_patients)
     {
         if (strcasecmp(name, pHeap->heap[i]->name) == 0)
             return i;
