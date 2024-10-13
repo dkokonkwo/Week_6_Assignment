@@ -87,9 +87,18 @@ int create_connection(graph_t *network, char *src, char *dest)
     dest_v = search_member(network, dest);
     if (!(src_v && dest_v))
         return 0;
+    if (is_connected(src_v, dest_v))
+    {
+        printf("Already connected.\n");
+        return 1;
+    }
     src_e = (edge_t *)malloc(sizeof(edge_t));
     if (!src_e)
         return 0;
+    dest_e = (edge_t *)malloc(sizeof(edge_t));
+    if (!dest_e)
+        return 0;
+    /*source to destination edge*/
     src_e->dest = dest_v, src_e->next = NULL;
     if (!src_v->first)
         src_v->first = src_e;
@@ -102,9 +111,7 @@ int create_connection(graph_t *network, char *src, char *dest)
         curr_edge->next = src_e;
     }
     src_v->nb_edges++;
-    dest_e = (edge_t *)malloc(sizeof(edge_t));
-    if (!dest_e)
-        return 0;
+    /*destination to source edge*/
     dest_e->dest = src_v, dest_e->next = NULL;
     if (!dest_v->first)
         dest_v->first = dest_e;
@@ -148,7 +155,7 @@ int is_connected(vertex_t *src, vertex_t *dest)
 void DFS(vertex_t *vertex, int *visited, vertex_t *member)
 {
     edge_t *edge;
-    if (visited[vertex->index])
+    if (visited[vertex->index] || vertex == member)
         return;
     visited[vertex->index] = 1;
     if (!is_connected(vertex, member))
@@ -178,7 +185,7 @@ void recommend_connections(graph_t *network, char *name)
     if (member)
     {
         printf("People You may Know:\n");
-        DFS(network->head, visited, member);
+        DFS(member, visited, member);
     }
     free(visited);
 }
