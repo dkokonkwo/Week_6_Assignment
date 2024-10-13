@@ -50,3 +50,60 @@ vertex_t *add_member(graph_t *network, char *name)
     }
     return new_member;
 }
+
+/**
+ * create_connection - adds edges between two members
+ * @network: network to create connection in
+ * @src: name of source member
+ * @dest: name of destination member
+ * Return: 1 on success, 0 on error
+ */
+int create_connection(graph_t *network, char *src, char *dest)
+{
+    vertex_t *curr, *src_v, *dest_v;
+    edge_t *src_e, *dest_e, *curr_edge;
+    if (!network || !src || !dest)
+        return 0;
+    for (curr = network->head; curr; curr = curr->next)
+    {
+        if (strcasecmp(curr->name, src) == 0)
+            src_v = curr;
+        if (strcasecmp(curr->name, dest) == 0)
+            dest_v = curr;
+        if (src_v && dest_v)
+            break;
+    }
+    if (!(src_v && dest_v))
+        return 0;
+    src_e = (edge_t *)malloc(sizeof(edge_t));
+    if (!src_e)
+        return 0;
+    src_e->dest = dest_v, src_e->next = NULL;
+    if (!src_v->first)
+        src_v->first = src_e;
+    else
+    {
+        for (curr_edge = src_v->first; curr_edge->next; curr_edge = curr_edge->next)
+        {
+            ;
+        }
+        curr_edge->next = src_e;
+    }
+    src_v->nb_edges++;
+    dest_e = (edge_t *)malloc(sizeof(edge_t));
+    if (!dest_e)
+        return 0;
+    dest_e->dest = src_v, dest_e->next = NULL;
+    if (!dest_v->first)
+        dest_v->first = dest_e;
+    else
+    {
+        for (curr_edge = dest_v->first; curr_edge->next; curr_edge = curr_edge->next)
+        {
+            ;
+        }
+        curr_edge->next = dest_e;
+    }
+    dest_v->nb_edges++;
+    return 1;
+}
