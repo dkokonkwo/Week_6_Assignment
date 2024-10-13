@@ -52,6 +52,25 @@ vertex_t *add_member(graph_t *network, char *name)
 }
 
 /**
+ * search_member - find vertex that matches with name
+ * @network: graph with vertices
+ * @name: member name
+ * Return: pointer to member vertex if found else NULL
+ */
+vertex_t *search_member(graph_t *network, char *name)
+{
+    vertex_t *curr;
+    if (!network || !name)
+        return NULL;
+    for (curr = network->head; curr; curr = curr->next)
+    {
+        if (strcasecmp(curr->name, name) == 0)
+            return curr;
+    }
+    return NULL;
+}
+
+/**
  * create_connection - adds edges between two members
  * @network: network to create connection in
  * @src: name of source member
@@ -64,15 +83,8 @@ int create_connection(graph_t *network, char *src, char *dest)
     edge_t *src_e, *dest_e, *curr_edge;
     if (!network || !src || !dest)
         return 0;
-    for (curr = network->head; curr; curr = curr->next)
-    {
-        if (strcasecmp(curr->name, src) == 0)
-            src_v = curr;
-        if (strcasecmp(curr->name, dest) == 0)
-            dest_v = curr;
-        if (src_v && dest_v)
-            break;
-    }
+    src_v = search_member(network, src);
+    dest_v = search_member(network, dest);
     if (!(src_v && dest_v))
         return 0;
     src_e = (edge_t *)malloc(sizeof(edge_t));
@@ -106,4 +118,99 @@ int create_connection(graph_t *network, char *src, char *dest)
     }
     dest_v->nb_edges++;
     return 1;
+}
+
+/**
+ * is_connected - finds out if two members are connected
+ * @src: first member 
+ * @dest: second member
+ * Return: 1 if connected else 0
+ */
+int is_connected(vertex_t *src, vertex_t *dest)
+{
+    edge_t *curr;
+    if (!src || !dest)
+        return 0;
+    for (curr = src->first; curr; curr = curr->next)
+    {
+        if (strcasecmp(curr->dest->name, dest->name) == 0)
+            return 1;
+    }
+    return 0;
+}
+
+/**
+ * DFS - depth first search to display recommended new connections
+ * @network: cuurent vertex in traversal
+ * @visited: track visited vertices/members
+ * @member: vertice to suggest new connections
+ */
+void DFS(vertex_t *vertex, int *visited, vertex_t *member)
+{
+    edge_t *edge;
+    if (visited[vertex->index])
+        return;
+    visited[vertex->index] = 1;
+    if (!is_connected(vertex, member))
+    {
+        printf("%s\n", vertex->name);
+    }
+    for (edge = vertex->first; edge; edge = edge->next)
+    {
+        if (!visited[edge->dest->index])
+            DFS(edge->dest, visited, member);
+    }
+}
+
+/**
+ * recommend_connection - recommends new connections for member
+ * @network: graph network
+ * @name: member name
+ */
+void recommend_connections(graph_t *network, char *name)
+{
+    if (!network || !name)
+        return;
+    int *visited = calloc(network->nb_vertices, sizeof(int));
+    if (!visited)
+        return;
+    vertex_t *member = search_member(network, name);
+    if (member)
+    {
+        printf("People You may Know:\n");
+        DFS(network->head, visited, member);
+    }
+    free(visited);
+}
+
+/**
+ * network_delete - completely deletes a graph
+ * @network: pointer to the graph to delete
+ */
+void network_delete(graph_t *network)
+{
+    vertex_t *vertex, *temp_vertex;
+    edge_t *edge, *temp_edge;
+
+    if (!network)
+        return;
+    vertex = network->head;
+    while (vertex)
+    {
+        edge = vertex->first;
+        while (edge)
+        {
+            temp_edge = edge->next;
+            free(edge);
+            edge = temp_edge;
+        }
+
+        free(vertex->name);
+
+        temp_vertex = vertex->next;
+        free(vertex);
+        vertex = temp_vertex;
+    }
+
+    free(network);
 }

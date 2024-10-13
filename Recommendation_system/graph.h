@@ -6,17 +6,17 @@
 #include <string.h>
 #include <stdio.h>
 
-typedef struct vertex_t;
+typedef struct vertex_s vertex_t;
 
 /**
  * struct edge_t - edge connecting a node
  * @dest: pointer to the connected vertex
  * @next: pointer to next edge
  */
-typedef struct edge_t
+typedef struct edge_s
 {
     vertex_t *dest;
-    struct edge_t *next;
+    struct edge_s *next;
 } edge_t;
 
 /**
@@ -27,7 +27,7 @@ typedef struct edge_t
  * @first: pointer to first connection
  * @next: pointer to the next vertex in adjacency list
  */
-typedef struct vertex_t
+typedef struct vertex_s
 {
     size_t index;
     char *name;
