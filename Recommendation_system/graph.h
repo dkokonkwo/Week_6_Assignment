@@ -55,5 +55,6 @@ int is_connected(vertex_t *src, vertex_t *dest);
 void DFS(vertex_t *vertex, int *visited, vertex_t *member);
 void recommend_connections(graph_t *network, char *name);
 void network_delete(graph_t *network);
+int build_network(graph_t *network);
 
 #endif

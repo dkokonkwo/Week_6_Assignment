@@ -221,3 +221,37 @@ void network_delete(graph_t *network)
 
     free(network);
 }
+
+int build_network(graph_t *network)
+{
+    int i, N = 15;
+    vertex_t *new_member;
+    char *members[] = 
+    {
+        "Alice Bennett",
+        "Marcus Carter",
+        "Isabella Diaz",
+        "Henry Foster",
+        "Chloe Grant",
+        "Benjamin Hayes",
+        "Olivia Jenkins",
+        "Daniel King",
+        "Emily Lewis",
+        "Jack Miller",
+        "Mia Parker",
+        "Ethan Roberts",
+        "Sophie Turner",
+        "Lucas White",
+        "Grace Young"
+    };
+    for (i = 0; i < 15; i++)
+    {
+        new_member = add_member(network, members[i]);
+        if (!new_member)
+        {
+            network_delete(network);
+            return 0;
+        }
+    }
+    return 1;
+}
