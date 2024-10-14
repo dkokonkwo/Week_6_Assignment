@@ -14,6 +14,13 @@ int main() {
         printf("Error: Unable to create network.\n");
         return EXIT_FAILURE;
     }
+    if (build_network(network))
+        printf("Built new network.\n");
+    else
+    {
+        printf("Error: Unable to build network.\n");
+        return EXIT_FAILURE;
+    }
 
     int choice;
     while (1) {
