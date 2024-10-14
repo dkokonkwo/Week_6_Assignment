@@ -157,10 +157,10 @@ int is_connected(vertex_t *src, vertex_t *dest)
 void DFS(vertex_t *vertex, int *visited, vertex_t *member)
 {
     edge_t *edge;
-    if (visited[vertex->index] || vertex == member)
+    if (visited[vertex->index])
         return;
     visited[vertex->index] = 1;
-    if (!is_connected(vertex, member))
+    if (!is_connected(vertex, member) && vertex != member)
     {
         printf("%s\n", vertex->name);
     }
@@ -230,7 +230,7 @@ void network_delete(graph_t *network)
 
 int build_network(graph_t *network)
 {
-    int i;
+    int i, conn;
     vertex_t *new_member;
     char *members[] = 
     {
@@ -260,5 +260,15 @@ int build_network(graph_t *network)
         }
         printf("Adding %s to network...\n", members[i]);
     }
-    return 1;
+    conn = create_connection(network, members[0], members[1]);
+    conn = create_connection(network, members[0], members[2]);
+    conn = create_connection(network, members[1], members[7]);
+    conn = create_connection(network, members[5], members[12]);
+    conn = create_connection(network, members[12], members[8]);
+    conn = create_connection(network, members[10], members[14]);
+    conn = create_connection(network, members[3], members[14]);
+    conn = create_connection(network, members[4], members[5]);
+    conn = create_connection(network, members[8], members[0]);
+    conn = create_connection(network, members[3], members[7]);
+    return conn;
 }
