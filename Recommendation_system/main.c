@@ -3,7 +3,6 @@
 #include <string.h>
 #include "graph.h"
 
-// Function prototypes
 void display_menu();
 void handle_add_member(graph_t *network);
 void handle_create_connection(graph_t *network);
@@ -22,7 +21,7 @@ int main() {
         printf("Enter your choice: ");
         if (scanf("%d", &choice) != 1) {
             printf("Invalid input. Please enter a number.\n");
-            while (getchar() != '\n'); // Clear invalid input
+            while (getchar() != '\n');
             continue;
         }
 
