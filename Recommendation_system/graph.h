@@ -33,7 +33,7 @@ typedef struct vertex_s
     char *name;
     size_t nb_edges;
     edge_t *first;
-    struct vertex_t *next;
+    struct vertex_s *next;
 } vertex_t;
 
 /**
@@ -43,7 +43,7 @@ typedef struct vertex_s
  */
 typedef struct graph_s
 {
-    size_t *nb_vertices;
+    size_t nb_vertices;
     vertex_t *head;
 } graph_t;
 

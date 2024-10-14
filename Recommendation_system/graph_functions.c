@@ -45,7 +45,9 @@ vertex_t *add_member(graph_t *network, char *name)
     {
         vertex_t *current;
         for (current = network->head; current->next; current = current->next)
+        {
             ;
+        }
         current->next = new_member;
     }
     return new_member;
@@ -79,7 +81,7 @@ vertex_t *search_member(graph_t *network, char *name)
  */
 int create_connection(graph_t *network, char *src, char *dest)
 {
-    vertex_t *curr, *src_v, *dest_v;
+    vertex_t *src_v, *dest_v;
     edge_t *src_e, *dest_e, *curr_edge;
     if (!network || !src || !dest)
         return 0;
@@ -184,8 +186,12 @@ void recommend_connections(graph_t *network, char *name)
     vertex_t *member = search_member(network, name);
     if (member)
     {
-        printf("People You may Know:\n");
+        printf("People %s May Know:\n", name);
         DFS(member, visited, member);
+    }
+    else
+    {
+        printf("%s is not in this network.\n", name);
     }
     free(visited);
 }
@@ -224,7 +230,7 @@ void network_delete(graph_t *network)
 
 int build_network(graph_t *network)
 {
-    int i, N = 15;
+    int i;
     vertex_t *new_member;
     char *members[] = 
     {
@@ -252,6 +258,7 @@ int build_network(graph_t *network)
             network_delete(network);
             return 0;
         }
+        printf("Adding %s to network...\n", members[i]);
     }
     return 1;
 }

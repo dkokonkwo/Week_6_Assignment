@@ -72,7 +72,8 @@ void display_menu() {
 void handle_add_member(graph_t *network) {
     char name[100];
     printf("Enter the name of the new member: ");
-    scanf("%99s", name);
+    scanf(" %[^\n]s", name);
+    while (getchar() != '\n');
 
     if (add_member(network, name)) {
         printf("Member '%s' added successfully.\n", name);
@@ -88,9 +89,11 @@ void handle_add_member(graph_t *network) {
 void handle_create_connection(graph_t *network) {
     char src[100], dest[100];
     printf("Enter the name of the source member: ");
-    scanf("%99s", src);
+    scanf(" %[^\n]s", src);
+    while (getchar() != '\n');
     printf("Enter the name of the destination member: ");
-    scanf("%99s", dest);
+    scanf(" %[^\n]s", dest);
+    while (getchar() != '\n');
 
     if (create_connection(network, src, dest)) {
         printf("Connection created between '%s' and '%s'.\n", src, dest);
@@ -106,7 +109,8 @@ void handle_create_connection(graph_t *network) {
 void handle_recommend_connections(graph_t *network) {
     char name[100];
     printf("Enter the name of the member for recommendations: ");
-    scanf("%99s", name);
+    scanf(" %[^\n]s", name);
+    while (getchar() != '\n');
 
     recommend_connections(network, name);
 }
