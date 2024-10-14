@@ -47,4 +47,13 @@ typedef struct graph_s
     vertex_t *head;
 } graph_t;
 
+graph_t *create_network(void);
+vertex_t *add_member(graph_t *network, char *name);
+vertex_t *search_member(graph_t *network, char *name);
+int create_connection(graph_t *network, char *src, char *dest);
+int is_connected(vertex_t *src, vertex_t *dest);
+void DFS(vertex_t *vertex, int *visited, vertex_t *member);
+void recommend_connections(graph_t *network, char *name);
+void network_delete(graph_t *network);
+
 #endif
